@@ -3,8 +3,11 @@
 ## Demo
 
 You can take a look at service on: 
+
 The following operators are supported: + - * / ( )
+
 Note: '+' symbol in urls is used to indicate whitespace. 
+
 So if you are run service from web browser please encode your string.
 
 ## How to run project:
