@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+﻿using System.Web.Http;
 
 namespace WebService.Controllers
 {
@@ -11,8 +6,7 @@ namespace WebService.Controllers
     {
         public IHttpActionResult Get(string x)
         {
-            var computeService = new ComputeService();
-            var result = computeService.Calculate(x);
+            int result = ComputeService.Calculate(x);
             return this.Json(result);
         }
     }

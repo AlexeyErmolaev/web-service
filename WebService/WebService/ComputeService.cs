@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace WebService
 {
-    public class ComputeService
+    public static class ComputeService
     {
-        public int Calculate(string expression)
+        public static int Calculate(string expression)
         {
             Stack<int> vals = new Stack<int>();
             Stack<char> operators = new Stack<char>();
-            Stack<char> operatorsinbrackets = new Stack<char>();
-            Stack<int> valsinbrackets = new Stack<int>();
+            Stack<char> operatorsInBrackets = new Stack<char>();
+            Stack<int> valsInBrackets = new Stack<int>();
             char[] input = expression.ToCharArray();
-            bool multiplicationinbrackets = false;
+            bool multiplicationInBrackets = false;
             bool multiplication = false;
-            bool inbrackets = false;
-            int operatorinbrackets = 0;
+            bool inBrackets = false;
+            int operatorsInBracketsCount = 0;
             int operatorsCount = 0;
 
             for (int i = 0; i < input.Length; i++)
@@ -25,14 +25,14 @@ namespace WebService
                 switch (current)
                 {
                     case '(':
-                        inbrackets = true;
+                        inBrackets = true;
                         break;
                     case '+':
                     case '-':
-                        if (inbrackets)
+                        if (inBrackets)
                         {
-                            operatorinbrackets++;
-                            operatorsinbrackets.Push(current);
+                            operatorsInBracketsCount++;
+                            operatorsInBrackets.Push(current);
                         }
                         else
                         {
@@ -42,11 +42,11 @@ namespace WebService
                         break;
                     case '*':
                     case '/':
-                        if (inbrackets)
+                        if (inBrackets)
                         {
-                            operatorinbrackets++;
-                            operatorsinbrackets.Push(current);
-                            multiplicationinbrackets = true;
+                            operatorsInBracketsCount++;
+                            operatorsInBrackets.Push(current);
+                            multiplicationInBrackets = true;
                         }
                         else
                         {
@@ -56,14 +56,14 @@ namespace WebService
                         }
                         break;
                     case ')':
-                        for (int r = 0; r < operatorinbrackets; r++)
+                        for (int r = 0; r < operatorsInBracketsCount; r++)
                         {
-                            GetCalcinbr(operatorsinbrackets, valsinbrackets);
+                            GetCalc(operatorsInBrackets, valsInBrackets);
                         }
-                        multiplicationinbrackets = false;
-                        inbrackets = false;
-                        operatorinbrackets = 0;
-                        int valinbr = valsinbrackets.Pop();
+                        multiplicationInBrackets = false;
+                        inBrackets = false;
+                        operatorsInBracketsCount = 0;
+                        int valinbr = valsInBrackets.Pop();
                         vals.Push(valinbr);
                         if (multiplication)
                         {
@@ -73,14 +73,14 @@ namespace WebService
                         multiplication = false;
                         break;
                     default:
-                        if (inbrackets)
+                        if (inBrackets)
                         {
-                            valsinbrackets.Push((int)char.GetNumericValue(current));
-                            if (multiplicationinbrackets)
+                            valsInBrackets.Push((int)char.GetNumericValue(current));
+                            if (multiplicationInBrackets)
                             {
-                                GetCalc(operatorsinbrackets, valsinbrackets);
-                                operatorinbrackets--;
-                                multiplicationinbrackets = false;
+                                GetCalc(operatorsInBrackets, valsInBrackets);
+                                operatorsInBracketsCount--;
+                                multiplicationInBrackets = false;
                             }
                         }
                         else
@@ -97,6 +97,7 @@ namespace WebService
 
                 }
             }
+
             for (int l = operatorsCount; l > 0; l--)
             {
                 GetCalc(operators, vals);
@@ -104,52 +105,28 @@ namespace WebService
             }
             return vals.Pop();
         }
-        private static void GetCalcinbr(Stack<char> operatorsinbrackets, Stack<int> valsinbrackets)
-        {
-            char opinbr = operatorsinbrackets.Pop();
-            if (opinbr.Equals('*'))
-            {
-                valsinbrackets.Push(valsinbrackets.Pop() * valsinbrackets.Pop());
-            }
-            if (opinbr.Equals('/'))
-            {
-                int vlast = valsinbrackets.Pop();
-                int penult = valsinbrackets.Pop();
-                valsinbrackets.Push(penult / vlast);
-            }
-            if (opinbr.Equals('+'))
-            {
-                valsinbrackets.Push(valsinbrackets.Pop() + valsinbrackets.Pop());
-            }
-            if (opinbr.Equals('-'))
-            {
-                int vlast = valsinbrackets.Pop();
-                int penult = valsinbrackets.Pop();
-                valsinbrackets.Push(penult - vlast);
-            }
-        }
+
         private static void GetCalc(Stack<char> operators, Stack<int> vals)
         {
             char op = operators.Pop();
-            if (op.Equals('*'))
+            int lastValue = vals.Pop();
+            int penultValue = vals.Pop();
+            switch (op)
             {
-                vals.Push(vals.Pop() * vals.Pop());
-            }
-            if (op.Equals('/'))
-            {
-                int vlast = vals.Pop();
-                int penult = vals.Pop();
-                vals.Push(penult / vlast);
-            }
-            if (op.Equals('+'))
-            {
-                vals.Push(vals.Pop() + vals.Pop());
-            }
-            if (op.Equals('-'))
-            {
-                int vlast = vals.Pop();
-                int penult = vals.Pop();
-                vals.Push(penult - vlast);
+                case '+':
+                    vals.Push(lastValue + penultValue);
+                    break;
+                case '-':
+                    vals.Push(penultValue - lastValue);
+                    break;
+                case '*':
+                    vals.Push(lastValue * penultValue);
+                    break;
+                case '/':
+                    vals.Push(penultValue / lastValue);
+                    break;
+                default:
+                    throw new NotImplementedException("Unexpected operator's value");
             }
         }
     }
