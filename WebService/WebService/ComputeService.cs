@@ -124,10 +124,6 @@ namespace WebService
                     break;
                 case '/':
                     vals.Push(penultValue / lastValue);
-                    if (lastValue.Equals("0"))
-                    {
-                        return ("Division by zero");
-                    }
                     break;
                 default:
                     throw new NotImplementedException("Unexpected operator's value");
