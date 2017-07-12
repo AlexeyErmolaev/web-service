@@ -2,7 +2,7 @@
 
 ## Demo
 
-You can take a look at service on: http://my-compute-service.azurewebsites.net/api/compute?x=2-2
+You can take a look at service on: http://my-compute-service.azurewebsites.net/api/compute?x=1/2%2B1/2
 
 The following operators are supported: + - * / ( )
 
