@@ -6,7 +6,7 @@ namespace WebService.Controllers
     {
         public IHttpActionResult Get(string x)
         {
-            int result = ComputeService.Calculate(x);
+            var result = ComputeService.Calculate(x);
             return this.Json(result);
         }
     }
