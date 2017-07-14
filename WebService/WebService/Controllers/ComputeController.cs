@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 
 namespace WebService.Controllers
 {
@@ -6,8 +7,15 @@ namespace WebService.Controllers
     {
         public IHttpActionResult Get(string x)
         {
-            var result = ComputeService.Calculate(x);
-            return this.Json(result);
+            try
+            {
+                var result = ComputeService.Calculate(x);
+                return this.Json(result);
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(ex.Message);
+            }
         }
     }
 }
