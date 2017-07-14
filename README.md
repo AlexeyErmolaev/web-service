@@ -6,6 +6,8 @@ You can take a look at service on: http://my-compute-service.azurewebsites.net/a
 
 The following operators are supported: + - * / ( )
 
+Note: '-' symbol after * / should be used in '( )'.
+
 Note: '+' symbol in urls is used to indicate whitespace. 
 
 So if you are run service from web browser please encode your string.
